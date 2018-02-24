@@ -1,0 +1,19 @@
+language: php
+
+php: 7.1
+
+branches:
+    only:
+        - master
+
+install:
+    - composer install
+
+before_script:
+    # turn off XDebug
+    - phpenv config-rm xdebug.ini || return 0
+    - composer check
+
+script:
+    - composer check-cs
+    - vendor/bin/phpunit

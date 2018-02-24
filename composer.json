@@ -1,0 +1,34 @@
+{
+    "name": "akondas/php-blockchain",
+    "type": "library",
+    "description": "Minimal working blockchain implemented in PHP",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Arkadiusz Kondas",
+            "email": "arkadiusz.kondas@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0",
+        "symplify/easy-coding-standard": "^3.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Blockchain\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Blockchain\\": "tests/"
+        }
+    },
+    "scripts": {
+        "fix-cs": "vendor/bin/ecs check src tests --fix --config=coding-standard.neon",
+        "check-cs": "vendor/bin/ecs check src tests --config=coding-standard.neon",
+        "tests": "vendor/bin/phpunit"
+    }
+}
