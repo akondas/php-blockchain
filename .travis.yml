@@ -6,13 +6,16 @@ branches:
     only:
         - master
 
+cache:
+  directories:
+    - $HOME/.composer/cache
+
 install:
     - composer install
 
 before_script:
     # turn off XDebug
     - phpenv config-rm xdebug.ini || return 0
-    - composer check
 
 script:
     - composer check-cs
