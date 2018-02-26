@@ -27,6 +27,10 @@
         }
     },
     "scripts": {
+        "build": [
+            "@check-cs",
+            "@tests"
+        ],
         "fix-cs": "vendor/bin/ecs check src tests --fix --config=coding-standard.neon",
         "check-cs": "vendor/bin/ecs check src tests --config=coding-standard.neon",
         "tests": "vendor/bin/phpunit"

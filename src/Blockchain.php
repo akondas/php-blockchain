@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Blockchain;
 
+use InvalidArgumentException;
+
 final class Blockchain
 {
     /**
@@ -18,6 +20,10 @@ final class Blockchain
 
     public function add(Block $block): void
     {
+        if (! $this->last()->isNextValid($block)) {
+            throw new InvalidArgumentException(sprintf('Given block %s is not valid next block', $block->hash));
+        }
+
         $this->blocks[] = $block;
     }
 
@@ -35,5 +41,10 @@ final class Blockchain
         }
 
         return true;
+    }
+
+    private function last(): Block
+    {
+        return end($this->blocks);
     }
 }
