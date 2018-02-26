@@ -13,7 +13,7 @@ final class Block
     /**
      * @var int
      */
-    public $number;
+    public $index;
 
     /**
      * @var string
@@ -35,9 +35,9 @@ final class Block
      */
     public $data;
 
-    public function __construct(int $number, string $hash, string $previousHash, DateTimeImmutable $createdAt, string $data)
+    public function __construct(int $index, string $hash, string $previousHash, DateTimeImmutable $createdAt, string $data)
     {
-        $this->number = $number;
+        $this->index = $index;
         $this->hash = $hash;
         $this->previousHash = $previousHash;
         $this->createdAt = $createdAt;
@@ -51,7 +51,7 @@ final class Block
 
     public function isNextValid(self $block): bool
     {
-        if ($block->number !== $this->number + 1) {
+        if ($block->index !== $this->index + 1) {
             return false;
         }
 
@@ -59,7 +59,7 @@ final class Block
             return false;
         }
 
-        if ($block->hash !== $this->calculateHash($block->number, $block->previousHash, $block->createdAt, $block->data)) {
+        if ($block->hash !== $this->calculateHash($block->index, $block->previousHash, $block->createdAt, $block->data)) {
             return false;
         }
 
@@ -68,7 +68,7 @@ final class Block
 
     public function isEqual(self $block): bool
     {
-        return $this->number === $block->number
+        return $this->index === $block->index
             && $this->hash === $block->hash
             && $this->previousHash === $block->previousHash
             && $this->createdAt->getTimestamp() === $block->createdAt->getTimestamp()
