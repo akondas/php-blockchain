@@ -13,27 +13,27 @@ final class Block
     /**
      * @var int
      */
-    public $index;
+    private $index;
 
     /**
      * @var string
      */
-    public $hash;
+    private $hash;
 
     /**
      * @var string
      */
-    public $previousHash;
+    private $previousHash;
 
     /**
      * @var \DateTimeImmutable
      */
-    public $createdAt;
+    private $createdAt;
 
     /**
      * @var string
      */
-    public $data;
+    private $data;
 
     public function __construct(int $index, string $hash, string $previousHash, DateTimeImmutable $createdAt, string $data)
     {
@@ -73,6 +73,11 @@ final class Block
             && $this->previousHash === $block->previousHash
             && $this->createdAt->getTimestamp() === $block->createdAt->getTimestamp()
             && $this->data === $block->data;
+    }
+
+    public function hash(): string
+    {
+        return $this->hash;
     }
 
     private function calculateHash(int $number, string $previousHash, DateTimeImmutable $createdAt, string $data): string

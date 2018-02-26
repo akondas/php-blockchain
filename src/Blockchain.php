@@ -21,7 +21,7 @@ final class Blockchain
     public function add(Block $block): void
     {
         if (! $this->last()->isNextValid($block)) {
-            throw new InvalidArgumentException(sprintf('Given block %s is not valid next block', $block->hash));
+            throw new InvalidArgumentException(sprintf('Given block %s is not valid next block', $block->hash()));
         }
 
         $this->blocks[] = $block;
