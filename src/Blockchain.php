@@ -43,7 +43,7 @@ final class Blockchain
         return true;
     }
 
-    private function last(): Block
+    public function last(): Block
     {
         return end($this->blocks);
     }

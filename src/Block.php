@@ -35,18 +35,37 @@ final class Block
      */
     private $data;
 
-    public function __construct(int $index, string $hash, string $previousHash, DateTimeImmutable $createdAt, string $data)
-    {
+    /**
+     * @var int
+     */
+    private $difficulty;
+
+    /**
+     * @var int
+     */
+    private $nonce;
+
+    public function __construct(
+        int $index,
+        string $hash,
+        string $previousHash,
+        DateTimeImmutable $createdAt,
+        string $data,
+        int $difficulty,
+        int $nonce
+    ) {
         $this->index = $index;
         $this->hash = $hash;
         $this->previousHash = $previousHash;
         $this->createdAt = $createdAt;
         $this->data = $data;
+        $this->difficulty = $difficulty;
+        $this->nonce = $nonce;
     }
 
     public static function genesis(): self
     {
-        return new self(0, '44f669382364d526982eb06973688597499f1b22b19b4e5145a5fa0fd4fead60', '', new DateTimeImmutable('2018-02-23 23:59:59'), 'PHP is awesome!');
+        return new self(0, '8b31c9ec8c2df21968aca3edd2bda8fc77ed45b0b3bc8bc39fa27d5c795bc829', '', new DateTimeImmutable('2018-02-23 23:59:59'), 'PHP is awesome!', 0, 0);
     }
 
     public function isNextValid(self $block): bool
@@ -59,7 +78,7 @@ final class Block
             return false;
         }
 
-        if ($block->hash !== $this->calculateHash($block->index, $block->previousHash, $block->createdAt, $block->data)) {
+        if ($block->hash !== self::calculateHash($block->index, $block->previousHash, $block->createdAt, $block->data, $block->difficulty, $block->nonce)) {
             return false;
         }
 
@@ -72,7 +91,10 @@ final class Block
             && $this->hash === $block->hash
             && $this->previousHash === $block->previousHash
             && $this->createdAt->getTimestamp() === $block->createdAt->getTimestamp()
-            && $this->data === $block->data;
+            && $this->data === $block->data
+            && $this->difficulty === $block->difficulty
+            && $this->nonce === $block->nonce
+        ;
     }
 
     public function hash(): string
@@ -80,8 +102,24 @@ final class Block
         return $this->hash;
     }
 
-    private function calculateHash(int $number, string $previousHash, DateTimeImmutable $createdAt, string $data): string
+    public function difficulty(): int
     {
-        return hash(self::HASH_ALGORITHM, $number.$previousHash.$createdAt->getTimestamp().$data);
+        return $this->difficulty;
+    }
+
+    public function index(): int
+    {
+        return $this->index;
+    }
+
+    public static function calculateHash(
+        int $index,
+        string $previousHash,
+        DateTimeImmutable $createdAt,
+        string $data,
+        int $difficulty,
+        int $nonce
+    ): string {
+        return hash(self::HASH_ALGORITHM, $index.$previousHash.$createdAt->getTimestamp().$data.$difficulty.$nonce);
     }
 }

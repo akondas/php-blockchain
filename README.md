@@ -11,7 +11,7 @@ Clean code approach to blockchain technology. Learn blockchain by reading source
  - [x] Block structure and hashing
  - [x] Genesis block
  - [x] Storing and validate Blockchain
- - [ ] Proof of Work with difficulty
+ - [x] Proof of Work with difficulty (missing consensus on the difficulty)
  - [ ] Communicating with other nodes & controlling the node (based on ReactPHP)
  - [ ] Start working on KondasCoin [akondas/coin](https://github.com/akondas/coin) :rocket: (Transactions, Wallet, Transaction relaying, Maybe some UI)
 
