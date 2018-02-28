@@ -47,4 +47,12 @@ final class Blockchain
     {
         return end($this->blocks);
     }
+
+    /**
+     * @return Block[]
+     */
+    public function blocks(): array
+    {
+        return $this->blocks;
+    }
 }

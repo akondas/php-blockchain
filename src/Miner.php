@@ -46,4 +46,9 @@ final class Miner
             ++$nonce;
         }
     }
+
+    public function blockchain(): Blockchain
+    {
+        return $this->blockchain;
+    }
 }
