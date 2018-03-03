@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Blockchain\Node;
 
-final class Peer
+use JsonSerializable;
+
+final class Peer implements JsonSerializable
 {
     /**
      * @var string
@@ -35,5 +37,16 @@ final class Peer
     public function isEqual(self $peer): bool
     {
         $this->host === $peer->host && $this->port === $peer->port;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'host' => $this->host,
+            'port' => $this->port,
+        ];
     }
 }

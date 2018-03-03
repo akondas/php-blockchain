@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Blockchain;
 
 use DateTimeImmutable;
+use JsonSerializable;
 
-final class Block
+final class Block implements JsonSerializable
 {
     public const HASH_ALGORITHM = 'sha256';
 
@@ -121,5 +122,21 @@ final class Block
         int $nonce
     ): string {
         return hash(self::HASH_ALGORITHM, $index.$previousHash.$createdAt->getTimestamp().$data.$difficulty.$nonce);
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'index' => $this->index,
+            'hash' => $this->hash,
+            'previousHash' => $this->previousHash,
+            'createdAt' => $this->createdAt->format('Y-m-d H:i:s'),
+            'data' => $this->data,
+            'difficulty' => $this->difficulty,
+            'nonce' => $this->nonce,
+        ];
     }
 }
