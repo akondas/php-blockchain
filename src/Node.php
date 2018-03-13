@@ -37,7 +37,7 @@ final class Node
     public function mineBlock(string $data): Block
     {
         $block = $this->miner->mineBlock($data);
-        $this->peers->broadcast(new Message(Message::TYPE_LAST_BLOCK, serialize($block)));
+        $this->peers->broadcast(new Message(Message::TYPE_LAST_BLOCK, json_encode($block)));
 
         return $block;
     }

@@ -3,9 +3,6 @@
 
 use React\EventLoop\Factory;
 use React\Http\Server as HttpServer;
-use Psr\Http\Message\ServerRequestInterface;
-use Blockchain\Node\Response\JsonResponse;
-use React\Http\Response;
 use React\Socket\Server;
 use Blockchain\Node;
 use Blockchain\Miner;
@@ -18,27 +15,14 @@ require __DIR__.'/../vendor/autoload.php';
 $loop = Factory::create();
 
 $node = new Node(new Miner(new Blockchain(Block::genesis()), new HashDifficulty\ZeroPrefix()));
+$webServer = new HttpServer(new Node\WebServer($node));
 
-$server = new HttpServer(function (ServerRequestInterface $request) use ($node) {
-    switch (trim($request->getUri()->getPath(), '/')) {
-        case 'blocks':
-            return new JsonResponse($node->blocks());
-        case 'mine':
-            return new JsonResponse($node->mineBlock($request->getBody()->getContents()));
-        case 'peers':
-            return new JsonResponse($node->peers());
-        case 'peers/add':
-            $data = json_decode($request->getBody()->getContents(), true);
-            $node->addPeer(new Node\Peer($data['host'], $data['port']));
-            return new Response(204);
-        default:
-            return new Response(404);
-    }
-});
+$params = getopt('', ['port::']);
+$port = $params['port'] ?? 8080;
 
-$socket = new Server(8080, $loop);
-$server->listen($socket);
+$socket = new Server($port, $loop);
+$webServer->listen($socket);
 
-echo "Server running at http://127.0.0.1:8080\n";
+echo sprintf("Server running at http://127.0.0.1:%s\n", $port);
 
 $loop->run();
