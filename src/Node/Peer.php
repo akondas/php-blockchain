@@ -5,38 +5,38 @@ declare(strict_types=1);
 namespace Blockchain\Node;
 
 use JsonSerializable;
+use React\Socket\ConnectionInterface;
 
 final class Peer implements JsonSerializable
 {
     /**
-     * @var string
+     * @var ConnectionInterface
      */
-    private $host;
+    private $connection;
 
-    /**
-     * @var int
-     */
-    private $port;
-
-    public function __construct(string $host, int $port)
+    public function __construct(ConnectionInterface $connection)
     {
-        $this->host = $host;
-        $this->port = $port;
+        $this->connection = $connection;
+    }
+
+    public function send(Message $message): void
+    {
+        $this->connection->write(serialize($message));
     }
 
     public function host(): string
     {
-        return $this->host;
+        return parse_url($this->connection->getRemoteAddress(), PHP_URL_HOST);
     }
 
     public function port(): int
     {
-        return $this->port;
+        return parse_url($this->connection->getRemoteAddress(), PHP_URL_PORT);
     }
 
     public function isEqual(self $peer): bool
     {
-        $this->host === $peer->host && $this->port === $peer->port;
+        $this->host() === $peer->host() && $this->port() === $peer->port();
     }
 
     /**
@@ -45,8 +45,8 @@ final class Peer implements JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'host' => $this->host,
-            'port' => $this->port,
+            'host' => $this->host(),
+            'port' => $this->port(),
         ];
     }
 }

@@ -5,25 +5,26 @@ declare(strict_types=1);
 namespace Blockchain;
 
 use Blockchain\Node\Message;
+use Blockchain\Node\P2pServer;
 use Blockchain\Node\Peer;
 use Blockchain\Node\Peers;
 
 final class Node
 {
     /**
-     * @var Peers
-     */
-    private $peers;
-
-    /**
      * @var Miner
      */
     private $miner;
 
-    public function __construct(Miner $miner)
+    /**
+     * @var P2pServer
+     */
+    private $p2pServer;
+
+    public function __construct(Miner $miner, P2pServer $p2pServer)
     {
         $this->miner = $miner;
-        $this->peers = new Peers();
+        $this->p2pServer = $p2pServer;
     }
 
     /**
@@ -37,7 +38,7 @@ final class Node
     public function mineBlock(string $data): Block
     {
         $block = $this->miner->mineBlock($data);
-        $this->peers->broadcast(new Message(Message::TYPE_LAST_BLOCK, json_encode($block)));
+        $this->p2pServer->broadcast(new Message(Message::TYPE_LAST_BLOCK, json_encode($block)));
 
         return $block;
     }
@@ -47,15 +48,11 @@ final class Node
      */
     public function peers(): array
     {
-        return $this->peers->all();
+        return $this->p2pServer->peers();
     }
 
-    public function addPeer(Peer $peer): void
+    public function connect(string $host, int $port): void
     {
-        if ($this->peers->contains($peer)) {
-            return;
-        }
-
-        $this->peers->add($peer);
+        $this->p2pServer->connect($host, $port);
     }
 }

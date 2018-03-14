@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Blockchain;
 
 use Blockchain\Miner\HashDifficulty\ZeroPrefix;
+use Blockchain\Node\P2pServer;
 use PHPUnit\Framework\TestCase;
 
 final class NodeTest extends TestCase
@@ -16,7 +17,10 @@ final class NodeTest extends TestCase
 
     public function setUp(): void
     {
-        $this->node = new Node(new Miner(new Blockchain(Block::genesis()), new ZeroPrefix()));
+        $this->node = new Node(
+            new Miner(new Blockchain(Block::genesis()), new ZeroPrefix()),
+            $this->createMock(P2pServer::class)
+        );
     }
 
     public function testListBlock(): void

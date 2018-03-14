@@ -24,10 +24,16 @@ To start the node:
 bin/node
 ```
 
-Default port is 8080 but you can change it with `--port` param:
+Default web server port is 8080 but you can change it with `--http-port` param:
 
 ```
-bin/node --port=9090
+bin/node --http-port=9090
+```
+
+Default p2p server port is 3030 but you can change it with `--p2p-port` param:
+
+```
+bin/node --p2p-port=2020
 ```
 
 ## API

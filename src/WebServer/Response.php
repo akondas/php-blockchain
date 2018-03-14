@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Blockchain\Node;
+namespace Blockchain\WebServer;
 
 use Psr\Http\Message\ResponseInterface;
 

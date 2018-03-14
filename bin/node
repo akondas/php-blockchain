@@ -3,26 +3,33 @@
 
 use React\EventLoop\Factory;
 use React\Http\Server as HttpServer;
-use React\Socket\Server;
+use React\Socket\Server as SocketServer;
+use React\Socket\Connector;
 use Blockchain\Node;
 use Blockchain\Miner;
 use Blockchain\Blockchain;
 use Blockchain\Block;
 use Blockchain\Miner\HashDifficulty;
+use Blockchain\WebServer;
 
 require __DIR__.'/../vendor/autoload.php';
 
+$params = getopt('', ['http-port::', 'p2p-port::']);
+$httpPort = $params['http-port'] ?? 8080;
+$p2pPort = $params['p2p-port'] ?? 3030;
+
 $loop = Factory::create();
 
-$node = new Node(new Miner(new Blockchain(Block::genesis()), new HashDifficulty\ZeroPrefix()));
-$webServer = new HttpServer(new Node\WebServer($node));
+$p2pServer =  new Node\P2pServer(new Connector($loop));
+$node = new Node(
+    new Miner(new Blockchain(Block::genesis()), new HashDifficulty\ZeroPrefix()),
+    $p2pServer
+);
 
-$params = getopt('', ['port::']);
-$port = $params['port'] ?? 8080;
+(new SocketServer($p2pPort, $loop))->on('connection', $p2pServer);
+(new HttpServer(new WebServer($node)))->listen(new SocketServer($httpPort, $loop));
 
-$socket = new Server($port, $loop);
-$webServer->listen($socket);
-
-echo sprintf("Server running at http://127.0.0.1:%s\n", $port);
+echo sprintf("Web server running at http://127.0.0.1:%s\n", $httpPort);
+echo sprintf("P2p server running at tcp://127.0.0.1:%s\n", $p2pPort);
 
 $loop->run();

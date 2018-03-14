@@ -48,6 +48,11 @@ final class Blockchain
         return end($this->blocks);
     }
 
+    public function withLastBlockOnly(): self
+    {
+        return new self($this->last());
+    }
+
     /**
      * @return Block[]
      */

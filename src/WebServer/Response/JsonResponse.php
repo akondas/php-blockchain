@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Blockchain\Node\Response;
+namespace Blockchain\WebServer\Response;
 
-use Blockchain\Node\Response;
+use Blockchain\WebServer\Response;
 use React\Http\Response as HttpResponse;
 
 final class JsonResponse extends HttpResponse implements Response

@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Blockchain\Node;
+namespace Blockchain;
 
-use Blockchain\Node;
-use Blockchain\Node\Response\JsonResponse;
+use Blockchain\WebServer\Response\JsonResponse;
 use Psr\Http\Message\ServerRequestInterface;
 use React\Http\Response;
 
@@ -32,7 +31,11 @@ final class WebServer
                 return new JsonResponse($this->node->peers());
             case 'POST:peers/add':
                 $data = json_decode($request->getBody()->getContents(), true);
-                $this->node->addPeer(new Peer($data['host'], $data['port']));
+                if (! isset($data['host'], $data['port'])) {
+                    return new Response(400);
+                }
+
+                $this->node->connect($data['host'], (int) $data['port']);
 
                 return new Response(204);
             default:
