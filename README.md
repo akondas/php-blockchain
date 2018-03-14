@@ -13,6 +13,7 @@ Clean code approach to blockchain technology. Learn blockchain by reading source
  - [x] Storing and validate Blockchain
  - [x] Proof of Work with difficulty (missing consensus on the difficulty)
  - [X] Communicating with other nodes & controlling the node (based on ReactPHP)
+ - [ ] Simple persistence layer 
  - [ ] Going serverless with AWS Lambda (experiment)
  - [ ] Start working on KondasCoin [akondas/coin](https://github.com/akondas/coin) :rocket: (Transactions, Wallet, Transaction relaying, Maybe some UI)
 
