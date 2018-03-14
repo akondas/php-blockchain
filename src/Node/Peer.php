@@ -34,11 +34,6 @@ final class Peer implements JsonSerializable
         return parse_url($this->connection->getRemoteAddress(), PHP_URL_PORT);
     }
 
-    public function isEqual(self $peer): bool
-    {
-        $this->host() === $peer->host() && $this->port() === $peer->port();
-    }
-
     /**
      * @return mixed[]
      */

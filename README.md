@@ -12,7 +12,7 @@ Clean code approach to blockchain technology. Learn blockchain by reading source
  - [x] Genesis block
  - [x] Storing and validate Blockchain
  - [x] Proof of Work with difficulty (missing consensus on the difficulty)
- - [ ] Communicating with other nodes & controlling the node (based on ReactPHP)
+ - [X] Communicating with other nodes & controlling the node (based on ReactPHP)
  - [ ] Going serverless with AWS Lambda (experiment)
  - [ ] Start working on KondasCoin [akondas/coin](https://github.com/akondas/coin) :rocket: (Transactions, Wallet, Transaction relaying, Maybe some UI)
 
@@ -40,20 +40,35 @@ bin/node --p2p-port=2020
 
 To control node you can use simple (pseudo) REST API:
 
+**[GET] /blocks**
+Response (list of all blocks):
 ```
-GET /blocks
-
-Return list of blocks:
 [{"index":0,"hash":"8b31c9ec8c2df21968aca3edd2bda8fc77ed45b0b3bc8bc39fa27d5c795bc829","previousHash":"","createdAt":"2018-02-23 23:59:59","data":"PHP is awesome!","difficulty":0,"nonce":0}]
 ```
 
+**[POST] /mine**
+Request (raw):
 ```
-POST /mine 
-"post content is data to mine"
-
-Return mined block:
+Data to mine (any string).
+```
+Response (mined block):
+```
 {"index":1,"hash":"a6eba6325a677802536337dc83268e524ffae5dc7db0950c98ff970846118f80","previousHash":"8b31c9ec8c2df21968aca3edd2bda8fc77ed45b0b3bc8bc39fa27d5c795bc829","createdAt":"2018-03-13 22:37:07","data":"Something goof","difficulty":0,"nonce":0}
 ```
+
+**[GET] /peers**
+Response (list of all connected peers):
+```
+[{"host":"127.0.0.1","port":3131}]
+```
+
+**[POST] /peers/add**
+Request (json with peer):
+```
+{"host":"127.0.0.1", "port":"3131"}
+```
+Response: 204 (empty)
+
 
 ## Tests
 

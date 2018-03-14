@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Blockchain\Node;
 
+use Blockchain\Blockchain;
 use Blockchain\Node;
 use React\Socket\ConnectionInterface;
 use React\Socket\Connector;
@@ -33,12 +34,40 @@ class P2pServer
 
     public function __invoke(ConnectionInterface $connection): void
     {
-        $peer = new Peer($connection);
-        if ($this->contains($peer)) {
+        if (isset($this->peers[$connection->getRemoteAddress()])) {
             return;
         }
 
-        //$connection->on('data')
+        $connection->on('data', function (string $data) use ($connection): void {
+            $message = unserialize($data, [Message::class]);
+            switch ($message->type()) {
+                case Message::REQUEST_LATEST:
+                    $connection->write(serialize(new Message(
+                        Message::BLOCKCHAIN,
+                        serialize($this->node->blockchain()->withLastBlockOnly())
+                    )));
+
+                    break;
+                case Message::REQUEST_ALL:
+                    $connection->write(serialize(new Message(
+                        Message::BLOCKCHAIN,
+                        serialize($this->node->blockchain())
+                    )));
+
+                    break;
+                case Message::BLOCKCHAIN:
+                    $this->handleBlockchain(unserialize($message->data(), [Blockchain::class]), $connection);
+
+                    break;
+            }
+        });
+
+        $connection->on('close', function () use ($connection): void {
+            unset($this->peers[$connection->getRemoteAddress()]);
+        });
+
+        $this->peers[$connection->getRemoteAddress()] = new Peer($connection);
+        $this->peers[$connection->getRemoteAddress()]->send(new Message(Message::REQUEST_LATEST));
     }
 
     public function attachNode(Node $node): void
@@ -59,6 +88,9 @@ class P2pServer
 
     public function broadcast(Message $message): void
     {
+        foreach ($this->peers as $peer) {
+            $peer->send($message);
+        }
     }
 
     /**
@@ -66,17 +98,25 @@ class P2pServer
      */
     public function peers(): array
     {
-        return $this->peers;
+        return array_values($this->peers);
     }
 
-    private function contains(Peer $peer): bool
+    private function handleBlockchain(Blockchain $blockchain, ConnectionInterface $connection): void
     {
-        foreach ($this->peers as $p) {
-            if ($p->isEqual($peer)) {
-                return true;
-            }
+        if ($blockchain->size() === 0) {
+            return;
         }
 
-        return false;
+        if ($blockchain->last()->index() <= $this->node->blockchain()->last()->index()) {
+            return; // received blockchain is no longer than current blockchain, skip
+        }
+
+        if ($blockchain->last()->previousHash() === $this->node->blockchain()->last()->hash()) {
+            $this->node->blockchain()->add($blockchain->last());
+        } elseif ($blockchain->size() === 1) {
+            $connection->write(serialize(new Message(Message::REQUEST_ALL)));
+        } else {
+            $this->node->replaceBlockchain($blockchain);
+        }
     }
 }

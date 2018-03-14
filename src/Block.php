@@ -103,6 +103,11 @@ final class Block implements JsonSerializable
         return $this->hash;
     }
 
+    public function previousHash(): string
+    {
+        return $this->previousHash;
+    }
+
     public function difficulty(): int
     {
         return $this->difficulty;

@@ -51,4 +51,13 @@ final class Miner
     {
         return $this->blockchain;
     }
+
+    public function replaceBlockchain(Blockchain $blockchain): void
+    {
+        if (! $blockchain->isValid()) {
+            return;
+        }
+
+        $this->blockchain = $blockchain;
+    }
 }

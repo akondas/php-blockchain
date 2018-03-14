@@ -25,6 +25,7 @@ $node = new Node(
     new Miner(new Blockchain(Block::genesis()), new HashDifficulty\ZeroPrefix()),
     $p2pServer
 );
+$p2pServer->attachNode($node);
 
 (new SocketServer($p2pPort, $loop))->on('connection', $p2pServer);
 (new HttpServer(new WebServer($node)))->listen(new SocketServer($httpPort, $loop));

@@ -38,7 +38,7 @@ final class Node
     public function mineBlock(string $data): Block
     {
         $block = $this->miner->mineBlock($data);
-        $this->p2pServer->broadcast(new Message(Message::TYPE_LAST_BLOCK, json_encode($block)));
+        $this->p2pServer->broadcast(new Message(Message::BLOCKCHAIN, serialize($this->blockchain()->withLastBlockOnly())));
 
         return $block;
     }
@@ -54,5 +54,15 @@ final class Node
     public function connect(string $host, int $port): void
     {
         $this->p2pServer->connect($host, $port);
+    }
+
+    public function blockchain(): Blockchain
+    {
+        return $this->miner->blockchain();
+    }
+
+    public function replaceBlockchain(Blockchain $blockchain): void
+    {
+        $this->miner->replaceBlockchain($blockchain);
     }
 }

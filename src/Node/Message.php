@@ -6,7 +6,11 @@ namespace Blockchain\Node;
 
 final class Message
 {
-    public const TYPE_LAST_BLOCK = 'last-block';
+    public const REQUEST_LATEST = 'request-latest';
+
+    public const REQUEST_ALL = 'request-all';
+
+    public const BLOCKCHAIN = 'blockchain';
 
     /**
      * @var string
@@ -14,11 +18,11 @@ final class Message
     private $type;
 
     /**
-     * @var string
+     * @var ?string
      */
     private $data;
 
-    public function __construct(string $type, string $data)
+    public function __construct(string $type, ?string $data = null)
     {
         $this->type = $type;
         $this->data = $data;
@@ -29,7 +33,7 @@ final class Message
         return $this->type;
     }
 
-    public function data(): string
+    public function data(): ?string
     {
         return $this->data;
     }

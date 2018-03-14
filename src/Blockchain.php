@@ -60,4 +60,9 @@ final class Blockchain
     {
         return $this->blocks;
     }
+
+    public function size(): int
+    {
+        return count($this->blocks);
+    }
 }
