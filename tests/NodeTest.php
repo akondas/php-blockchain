@@ -17,9 +17,11 @@ final class NodeTest extends TestCase
 
     public function setUp(): void
     {
+        /** @var P2pServer $p2pServer */
+        $p2pServer = $this->createMock(P2pServer::class);
         $this->node = new Node(
             new Miner(new Blockchain(Block::genesis()), new ZeroPrefix()),
-            $this->createMock(P2pServer::class)
+            $p2pServer
         );
     }
 

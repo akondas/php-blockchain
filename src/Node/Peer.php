@@ -26,12 +26,12 @@ final class Peer implements JsonSerializable
 
     public function host(): string
     {
-        return parse_url($this->connection->getRemoteAddress(), PHP_URL_HOST);
+        return parse_url((string) $this->connection->getRemoteAddress(), PHP_URL_HOST);
     }
 
     public function port(): int
     {
-        return parse_url($this->connection->getRemoteAddress(), PHP_URL_PORT);
+        return parse_url((string) $this->connection->getRemoteAddress(), PHP_URL_PORT);
     }
 
     /**
