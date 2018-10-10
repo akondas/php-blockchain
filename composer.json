@@ -15,7 +15,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^7.0",
-        "symplify/easy-coding-standard": "^3.2"
+        "symplify/easy-coding-standard": "^3.2",
+        "phpstan/phpstan": "^0.10.3"
     },
     "autoload": {
         "psr-4": {
@@ -34,6 +35,7 @@
         ],
         "fix-cs": "vendor/bin/ecs check src tests --fix --config=coding-standard.neon",
         "check-cs": "vendor/bin/ecs check src tests --config=coding-standard.neon",
+        "phpstan": "vendor/bin/phpstan analyse src tests --level=max",
         "tests": "vendor/bin/phpunit"
     }
 }

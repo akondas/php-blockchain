@@ -19,4 +19,5 @@ before_script:
 
 script:
     - composer check-cs
-    - vendor/bin/phpunit
+    - composer phpstan
+    - composer tests
