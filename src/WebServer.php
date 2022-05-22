@@ -10,14 +10,8 @@ use React\Http\Response;
 
 final class WebServer
 {
-    /**
-     * @var Node
-     */
-    private $node;
-
-    public function __construct(Node $node)
+    public function __construct(private Node $node)
     {
-        $this->node = $node;
     }
 
     public function __invoke(ServerRequestInterface $request): Response

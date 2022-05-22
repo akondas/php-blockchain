@@ -11,57 +11,15 @@ final class Block implements JsonSerializable
 {
     public const HASH_ALGORITHM = 'sha256';
 
-    /**
-     * @var int
-     */
-    private $index;
-
-    /**
-     * @var string
-     */
-    private $hash;
-
-    /**
-     * @var string
-     */
-    private $previousHash;
-
-    /**
-     * @var \DateTimeImmutable
-     */
-    private $createdAt;
-
-    /**
-     * @var string
-     */
-    private $data;
-
-    /**
-     * @var int
-     */
-    private $difficulty;
-
-    /**
-     * @var int
-     */
-    private $nonce;
-
     public function __construct(
-        int $index,
-        string $hash,
-        string $previousHash,
-        DateTimeImmutable $createdAt,
-        string $data,
-        int $difficulty,
-        int $nonce
+        private int $index,
+        private string $hash,
+        private string $previousHash,
+        private DateTimeImmutable $createdAt,
+        private string $data,
+        private int $difficulty,
+        private int $nonce
     ) {
-        $this->index = $index;
-        $this->hash = $hash;
-        $this->previousHash = $previousHash;
-        $this->createdAt = $createdAt;
-        $this->data = $data;
-        $this->difficulty = $difficulty;
-        $this->nonce = $nonce;
     }
 
     public static function genesis(): self
@@ -134,7 +92,7 @@ final class Block implements JsonSerializable
     }
 
     /**
-     * @return mixed[]
+     * @return array<string,string|int>
      */
     public function jsonSerialize(): array
     {

@@ -12,20 +12,10 @@ final class Message
 
     public const BLOCKCHAIN = 'blockchain';
 
-    /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var ?string
-     */
-    private $data;
-
-    public function __construct(string $type, ?string $data = null)
-    {
-        $this->type = $type;
-        $this->data = $data;
+    public function __construct(
+        private string $type,
+        private ?string $data = null
+    ) {
     }
 
     public function type(): string

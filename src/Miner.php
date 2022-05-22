@@ -9,20 +9,8 @@ use DateTimeImmutable;
 
 final class Miner
 {
-    /**
-     * @var Blockchain
-     */
-    private $blockchain;
-
-    /**
-     * @var HashDifficulty
-     */
-    private $hashDifficulty;
-
-    public function __construct(Blockchain $blockchain, HashDifficulty $hashDifficulty)
+    public function __construct(private Blockchain $blockchain, private HashDifficulty $hashDifficulty)
     {
-        $this->blockchain = $blockchain;
-        $this->hashDifficulty = $hashDifficulty;
     }
 
     public function mineBlock(string $data): Block

@@ -17,7 +17,7 @@ final class ZeroPrefix implements HashDifficulty
         $binary = $this->binaryString($hash, $difficulty);
         $prefix = \str_repeat('0', $difficulty);
 
-        return \strpos($binary, $prefix) === 0;
+        return \str_starts_with($binary, $prefix);
     }
 
     private function binaryString(string $hash, int $difficulty): string
