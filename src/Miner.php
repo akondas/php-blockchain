@@ -43,7 +43,7 @@ final class Miner
                 return $block;
             }
 
-            ++$nonce;
+            $nonce++;
         }
     }
 
@@ -54,7 +54,7 @@ final class Miner
 
     public function replaceBlockchain(Blockchain $blockchain): void
     {
-        if (! $blockchain->isValid()) {
+        if (!$blockchain->isValid()) {
             return;
         }
 

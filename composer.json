@@ -11,7 +11,8 @@
     ],
     "require": {
         "php": "^8.0",
-        "react/http": "^0.8.1"
+        "react/http": "^0.8.1",
+        "friendsofphp/php-cs-fixer": "^3.8"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
@@ -32,8 +33,8 @@
             "@check-cs",
             "@tests"
         ],
-        "fix-cs": "vendor/bin/ecs check src tests --fix --config=coding-standard.neon",
-        "check-cs": "vendor/bin/ecs check src tests --config=coding-standard.neon",
+        "fix-cs": "php-cs-fixer fix --diff --ansi",
+        "check-cs": "php-cs-fixer fix --dry-run --diff --ansi",
         "phpstan": "vendor/bin/phpstan analyse src tests --level=max",
         "tests": "vendor/bin/phpunit"
     }

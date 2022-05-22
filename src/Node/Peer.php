@@ -15,17 +15,17 @@ final class Peer implements JsonSerializable
 
     public function send(Message $message): void
     {
-        $this->connection->write(serialize($message));
+        $this->connection->write(\serialize($message));
     }
 
     public function host(): string
     {
-        return (string) parse_url((string) $this->connection->getRemoteAddress(), PHP_URL_HOST);
+        return (string) \parse_url((string) $this->connection->getRemoteAddress(), \PHP_URL_HOST);
     }
 
     public function port(): int
     {
-        return (int) parse_url((string) $this->connection->getRemoteAddress(), PHP_URL_PORT);
+        return (int) \parse_url((string) $this->connection->getRemoteAddress(), \PHP_URL_PORT);
     }
 
     /**

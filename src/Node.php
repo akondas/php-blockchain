@@ -7,7 +7,6 @@ namespace Blockchain;
 use Blockchain\Node\Message;
 use Blockchain\Node\P2pServer;
 use Blockchain\Node\Peer;
-use Blockchain\Node\Peers;
 
 final class Node
 {
@@ -38,7 +37,7 @@ final class Node
     public function mineBlock(string $data): Block
     {
         $block = $this->miner->mineBlock($data);
-        $this->p2pServer->broadcast(new Message(Message::BLOCKCHAIN, serialize($this->blockchain()->withLastBlockOnly())));
+        $this->p2pServer->broadcast(new Message(Message::BLOCKCHAIN, \serialize($this->blockchain()->withLastBlockOnly())));
 
         return $block;
     }

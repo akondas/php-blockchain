@@ -22,7 +22,7 @@ final class WebServer
 
     public function __invoke(ServerRequestInterface $request): Response
     {
-        switch ($request->getMethod().':'.trim($request->getUri()->getPath(), '/')) {
+        switch ($request->getMethod().':'.\trim($request->getUri()->getPath(), '/')) {
             case 'GET:blocks':
                 return new JsonResponse($this->node->blocks());
             case 'POST:mine':
@@ -30,8 +30,8 @@ final class WebServer
             case 'GET:peers':
                 return new JsonResponse($this->node->peers());
             case 'POST:peers/add':
-                $data = json_decode($request->getBody()->getContents(), true);
-                if (!is_array($data) || !isset($data['host'], $data['port'])) {
+                $data = \json_decode($request->getBody()->getContents(), true);
+                if (!\is_array($data) || !isset($data['host'], $data['port'])) {
                     return new Response(400);
                 }
 

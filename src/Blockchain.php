@@ -20,8 +20,8 @@ final class Blockchain
 
     public function add(Block $block): void
     {
-        if (! $this->last()->isNextValid($block)) {
-            throw new InvalidArgumentException(sprintf('Given block %s is not valid next block', $block->hash()));
+        if (!$this->last()->isNextValid($block)) {
+            throw new InvalidArgumentException(\sprintf('Given block %s is not valid next block', $block->hash()));
         }
 
         $this->blocks[] = $block;
@@ -29,13 +29,13 @@ final class Blockchain
 
     public function isValid(): bool
     {
-        if (! $this->blocks[0]->isEqual(Block::genesis())) {
+        if (!$this->blocks[0]->isEqual(Block::genesis())) {
             return false;
         }
 
-        $count = count($this->blocks) - 1;
-        for ($i = 0; $i < $count; ++$i) {
-            if (! $this->blocks[$i]->isNextValid($this->blocks[$i + 1])) {
+        $count = \count($this->blocks) - 1;
+        for ($i = 0; $i < $count; $i++) {
+            if (!$this->blocks[$i]->isNextValid($this->blocks[$i + 1])) {
                 return false;
             }
         }
@@ -45,7 +45,7 @@ final class Blockchain
 
     public function last(): Block
     {
-        return end($this->blocks);
+        return \end($this->blocks);
     }
 
     public function withLastBlockOnly(): self
@@ -63,6 +63,6 @@ final class Blockchain
 
     public function size(): int
     {
-        return count($this->blocks);
+        return \count($this->blocks);
     }
 }

@@ -32,29 +32,29 @@ class P2pServer
         }
 
         $connection->on('data', function (string $data) use ($connection): void {
-            $message = unserialize($data, [Message::class]);
-            if(!$message instanceof Message) {
+            $message = \unserialize($data, [Message::class]);
+            if (!$message instanceof Message) {
                 return;
             }
 
             switch ($message->type()) {
                 case Message::REQUEST_LATEST:
-                    $connection->write(serialize(new Message(
+                    $connection->write(\serialize(new Message(
                         Message::BLOCKCHAIN,
-                        serialize($this->node()->blockchain()->withLastBlockOnly())
+                        \serialize($this->node()->blockchain()->withLastBlockOnly())
                     )));
 
                     break;
                 case Message::REQUEST_ALL:
-                    $connection->write(serialize(new Message(
+                    $connection->write(\serialize(new Message(
                         Message::BLOCKCHAIN,
-                        serialize($this->node()->blockchain())
+                        \serialize($this->node()->blockchain())
                     )));
 
                     break;
                 case Message::BLOCKCHAIN:
-                    $blockchain = unserialize($message->data() ?? '', [Blockchain::class]);
-                    if(!$blockchain instanceof Blockchain) {
+                    $blockchain = \unserialize($message->data() ?? '', [Blockchain::class]);
+                    if (!$blockchain instanceof Blockchain) {
                         return;
                     }
                     $this->handleBlockchain($blockchain, $connection);
@@ -82,7 +82,7 @@ class P2pServer
 
     public function connect(string $host, int $port): void
     {
-        $this->connector->connect(sprintf('%s:%s', $host, $port))->then(function (ConnectionInterface $connection): void {
+        $this->connector->connect(\sprintf('%s:%s', $host, $port))->then(function (ConnectionInterface $connection): void {
             $this($connection);
         });
     }
@@ -99,7 +99,7 @@ class P2pServer
      */
     public function peers(): array
     {
-        return array_values($this->peers);
+        return \array_values($this->peers);
     }
 
     private function handleBlockchain(Blockchain $blockchain, ConnectionInterface $connection): void
@@ -115,7 +115,7 @@ class P2pServer
         if ($blockchain->last()->previousHash() === $this->node()->blockchain()->last()->hash()) {
             $this->node()->blockchain()->add($blockchain->last());
         } elseif ($blockchain->size() === 1) {
-            $connection->write(serialize(new Message(Message::REQUEST_ALL)));
+            $connection->write(\serialize(new Message(Message::REQUEST_ALL)));
         } else {
             $this->node()->replaceBlockchain($blockchain);
         }

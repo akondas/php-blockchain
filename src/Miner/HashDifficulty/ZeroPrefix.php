@@ -15,9 +15,9 @@ final class ZeroPrefix implements HashDifficulty
         }
 
         $binary = $this->binaryString($hash, $difficulty);
-        $prefix = str_repeat('0', $difficulty);
+        $prefix = \str_repeat('0', $difficulty);
 
-        return strpos($binary, $prefix) === 0;
+        return \strpos($binary, $prefix) === 0;
     }
 
     private function binaryString(string $hash, int $difficulty): string
@@ -41,9 +41,9 @@ final class ZeroPrefix implements HashDifficulty
             'e' => '1110',
             'f' => '1111',
         ];
-        $length = ceil($difficulty / 4);
+        $length = \ceil($difficulty / 4);
 
-        for ($i = 0; $i < $length; ++$i) {
+        for ($i = 0; $i < $length; $i++) {
             $binary .= $lookup[$hash[$i]];
         }
 

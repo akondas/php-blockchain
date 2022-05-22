@@ -14,6 +14,6 @@ final class JsonResponse extends HttpResponse implements Response
      */
     public function __construct($data)
     {
-        parent::__construct(200, ['Content-Type' => 'application/json'], json_encode($data));
+        parent::__construct(200, ['Content-Type' => 'application/json'], \json_encode($data));
     }
 }

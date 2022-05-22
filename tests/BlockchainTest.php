@@ -64,7 +64,7 @@ final class BlockchainTest extends TestCase
         $blocksProperty->setAccessible(true);
 
         $blocks = $blocksProperty->getValue($blockchain);
-        assert(is_array($blocks));
+        \assert(\is_array($blocks));
         $blocks[] = $block;
 
         $blocksProperty->setValue($blockchain, $blocks);

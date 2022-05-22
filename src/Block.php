@@ -94,8 +94,7 @@ final class Block implements JsonSerializable
             && $this->createdAt->getTimestamp() === $block->createdAt->getTimestamp()
             && $this->data === $block->data
             && $this->difficulty === $block->difficulty
-            && $this->nonce === $block->nonce
-        ;
+            && $this->nonce === $block->nonce;
     }
 
     public function hash(): string
@@ -131,7 +130,7 @@ final class Block implements JsonSerializable
         int $difficulty,
         int $nonce
     ): string {
-        return hash(self::HASH_ALGORITHM, $index.$previousHash.$createdAt->getTimestamp().$data.$difficulty.$nonce);
+        return \hash(self::HASH_ALGORITHM, $index.$previousHash.$createdAt->getTimestamp().$data.$difficulty.$nonce);
     }
 
     /**
