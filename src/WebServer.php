@@ -31,7 +31,7 @@ final class WebServer
                 return new JsonResponse($this->node->peers());
             case 'POST:peers/add':
                 $data = json_decode($request->getBody()->getContents(), true);
-                if (! isset($data['host'], $data['port'])) {
+                if (!is_array($data) || !isset($data['host'], $data['port'])) {
                     return new Response(400);
                 }
 

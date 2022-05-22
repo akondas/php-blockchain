@@ -9,13 +9,13 @@ use InvalidArgumentException;
 final class Blockchain
 {
     /**
-     * @var Block[]
+     * @var non-empty-array<Block>
      */
-    private $blocks = [];
+    private array $blocks;
 
     public function __construct(Block $genesisBlock)
     {
-        $this->blocks[] = $genesisBlock;
+        $this->blocks = [$genesisBlock];
     }
 
     public function add(Block $block): void

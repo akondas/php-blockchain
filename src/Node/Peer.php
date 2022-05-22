@@ -9,14 +9,8 @@ use React\Socket\ConnectionInterface;
 
 final class Peer implements JsonSerializable
 {
-    /**
-     * @var ConnectionInterface
-     */
-    private $connection;
-
-    public function __construct(ConnectionInterface $connection)
+    public function __construct(private ConnectionInterface $connection)
     {
-        $this->connection = $connection;
     }
 
     public function send(Message $message): void
@@ -26,12 +20,12 @@ final class Peer implements JsonSerializable
 
     public function host(): string
     {
-        return parse_url((string) $this->connection->getRemoteAddress(), PHP_URL_HOST);
+        return (string) parse_url((string) $this->connection->getRemoteAddress(), PHP_URL_HOST);
     }
 
     public function port(): int
     {
-        return parse_url((string) $this->connection->getRemoteAddress(), PHP_URL_PORT);
+        return (int) parse_url((string) $this->connection->getRemoteAddress(), PHP_URL_PORT);
     }
 
     /**

@@ -8,24 +8,17 @@ use Blockchain\Blockchain;
 use Blockchain\Node;
 use React\Socket\ConnectionInterface;
 use React\Socket\Connector;
-use RuntimeException;
 
 class P2pServer
 {
-    /**
-     * @var Node
-     */
-    private $node;
+    private ?Node $node = null;
 
-    /**
-     * @var Connector
-     */
-    private $connector;
+    private Connector $connector;
 
     /**
      * @var Peer[]
      */
-    private $peers = [];
+    private array $peers = [];
 
     public function __construct(Connector $connector)
     {
@@ -40,23 +33,31 @@ class P2pServer
 
         $connection->on('data', function (string $data) use ($connection): void {
             $message = unserialize($data, [Message::class]);
+            if(!$message instanceof Message) {
+                return;
+            }
+
             switch ($message->type()) {
                 case Message::REQUEST_LATEST:
                     $connection->write(serialize(new Message(
                         Message::BLOCKCHAIN,
-                        serialize($this->node->blockchain()->withLastBlockOnly())
+                        serialize($this->node()->blockchain()->withLastBlockOnly())
                     )));
 
                     break;
                 case Message::REQUEST_ALL:
                     $connection->write(serialize(new Message(
                         Message::BLOCKCHAIN,
-                        serialize($this->node->blockchain())
+                        serialize($this->node()->blockchain())
                     )));
 
                     break;
                 case Message::BLOCKCHAIN:
-                    $this->handleBlockchain(unserialize($message->data(), [Blockchain::class]), $connection);
+                    $blockchain = unserialize($message->data() ?? '', [Blockchain::class]);
+                    if(!$blockchain instanceof Blockchain) {
+                        return;
+                    }
+                    $this->handleBlockchain($blockchain, $connection);
 
                     break;
             }
@@ -73,7 +74,7 @@ class P2pServer
     public function attachNode(Node $node): void
     {
         if ($this->node !== null) {
-            throw new RuntimeException('Node already attached to p2pServer');
+            throw new \RuntimeException('Node already attached to p2pServer');
         }
 
         $this->node = $node;
@@ -107,16 +108,21 @@ class P2pServer
             return;
         }
 
-        if ($blockchain->last()->index() <= $this->node->blockchain()->last()->index()) {
+        if ($blockchain->last()->index() <= $this->node()->blockchain()->last()->index()) {
             return; // received blockchain is no longer than current blockchain, skip
         }
 
-        if ($blockchain->last()->previousHash() === $this->node->blockchain()->last()->hash()) {
-            $this->node->blockchain()->add($blockchain->last());
+        if ($blockchain->last()->previousHash() === $this->node()->blockchain()->last()->hash()) {
+            $this->node()->blockchain()->add($blockchain->last());
         } elseif ($blockchain->size() === 1) {
             $connection->write(serialize(new Message(Message::REQUEST_ALL)));
         } else {
-            $this->node->replaceBlockchain($blockchain);
+            $this->node()->replaceBlockchain($blockchain);
         }
+    }
+
+    private function node(): Node
+    {
+        return $this->node ?? throw new \RuntimeException('Node was not attached');
     }
 }
