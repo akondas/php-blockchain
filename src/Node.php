@@ -10,20 +10,8 @@ use Blockchain\Node\Peer;
 
 final class Node
 {
-    /**
-     * @var Miner
-     */
-    private $miner;
-
-    /**
-     * @var P2pServer
-     */
-    private $p2pServer;
-
-    public function __construct(Miner $miner, P2pServer $p2pServer)
+    public function __construct(private Miner $miner, private P2pServer $p2pServer)
     {
-        $this->miner = $miner;
-        $this->p2pServer = $p2pServer;
     }
 
     /**

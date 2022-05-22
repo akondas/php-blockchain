@@ -29,7 +29,7 @@ final class Peer implements JsonSerializable
     }
 
     /**
-     * @return mixed[]
+     * @return array<string,string|int>
      */
     public function jsonSerialize(): array
     {

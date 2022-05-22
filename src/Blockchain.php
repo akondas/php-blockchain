@@ -54,7 +54,7 @@ final class Blockchain
     }
 
     /**
-     * @return Block[]
+     * @return non-empty-array<Block>
      */
     public function blocks(): array
     {
